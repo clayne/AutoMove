@@ -32,7 +32,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE 
 
 project(
 	AutoMove
-	VERSION 1.2.0
+	VERSION 1.3.0
 	LANGUAGES CXX
 )
 
@@ -94,29 +94,33 @@ find_package(fmt REQUIRED CONFIG)
 # ---- Add source files ----
 
 set(HEADERS
-	src/PCH.h
-	src/Offsets.h
-	src/Papyrus.h
-	src/Events.h
-	src/Serialization.h
-	src/Extended/TESObjectREFR.h	 
-	src/Extended/PlacePlayerMarkerCallbackFunctor.h 
-	src/Extended/FastTravelConfirmCallback.h
-	src/Hooks/CameraState.h
-	src/Hooks/MessageBox.h
-	src/Hooks/AutoMove.h
-)
+ "src/PCH.h"
+ "src/Offsets.h"
+ "src/Papyrus.h"
+ "src/Events.h"
+ "src/Serialization.h"
+ "src/Extended/TESObjectREFR.h"
+ "src/Extended/PlacePlayerMarkerCallbackFunctor.h"
+ "src/Extended/FastTravelConfirmCallback.h"
+ "src/Hooks/CameraState.h"
+ "src/Hooks/PlaceMarker.h"
+ "src/Hooks/FastTravel.h"
+ "src/Hooks/AutoMove.h"
+ "src/Hooks/PlayerDialogue.h" 
+  )
 
 set(SOURCES
-	src/main.cpp
-	src/Papyrus.cpp
-	src/Events.cpp
-	src/Serialization.cpp
-	src/Extended/TESObjectREFR.cpp
-	src/Hooks/CameraState.cpp
-	src/Hooks/MessageBox.cpp
-	src/Hooks/AutoMove.cpp
-)
+ "src/main.cpp"
+ "src/Papyrus.cpp"
+ "src/Events.cpp"
+ "src/Serialization.cpp"
+ "src/Extended/TESObjectREFR.cpp"
+ "src/Hooks/CameraState.cpp"
+ "src/Hooks/PlaceMarker.cpp"
+ "src/Hooks/FastTravel.cpp"
+ "src/Hooks/AutoMove.cpp" 
+ "src/Hooks/PlayerDialogue.cpp" 
+ )
 
 source_group(
 	TREE ${CMAKE_CURRENT_SOURCE_DIR}

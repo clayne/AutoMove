@@ -1,8 +1,11 @@
 #include "Hooks\CameraState.h"
-#include "Hooks\MessageBox.h"
+#include "Hooks\PlaceMarker.h"
+#include "Hooks\FastTravel.h"
+#include "Hooks\PlayerDialogue.h"
 #include "Hooks\AutoMove.h"
 #include "Serialization.h"
 #include "Papyrus.h"
+
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
@@ -20,7 +23,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 #endif
 
 	spdlog::set_default_logger(log);
-	spdlog::set_pattern("[%l] %v");
+	spdlog::set_pattern("[%H:%M:%S][%l] %v");
 
 	logger::info("{} v{}", PLUGIN_NAME, PLUGIN_VERSION);
 
@@ -53,13 +56,15 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	papyrus->Register(Papyrus::RegisterFuncs);
 
 	auto serialization = SKSE::GetSerializationInterface();
-	serialization->SetUniqueID(Serialization::kAutoWalk);
+	serialization->SetUniqueID('MOVE');
 	serialization->SetSaveCallback(Serialization::SaveCallback);
 	serialization->SetLoadCallback(Serialization::LoadCallback);
 	serialization->SetRevertCallback(Serialization::RevertCallback);
 
 	CameraStateHook::Install();
 	PlaceMarkerHook::Install();
+//	FastTravelHook::Install();
+	PlayerDialogueHook::Install();
 	AutoMoveHook::Install();
 
 	return true;

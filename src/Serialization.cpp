@@ -1,6 +1,7 @@
 #include "Serialization.h"
 #include "Events.h"
 
+
 namespace Serialization
 {
 	std::string DecodeTypeCode(uint32_t a_typeCode)
@@ -19,8 +20,7 @@ namespace Serialization
 
 	void SaveCallback(SKSE::SerializationInterface* a_intfc)
 	{
-		Save<OnCustomMarkerChangeRegSet>(a_intfc, kMarkerChange);
-		Save<OnFastTravelConfirmRegSet>(a_intfc, kFastTravel);
+		EventRegsHolder::GetSingleton()->Save(a_intfc, kVersion);
 
 		logger::info("Finished saving data"sv);
 	}
@@ -30,29 +30,20 @@ namespace Serialization
 		uint32_t type, version, length;
 
 		while (a_intfc->GetNextRecordInfo(type, version, length)) {
+
 			if (version != kVersion) {
 				logger::critical("Loaded data is out of date! Read ({}), expected ({}) for type code ({})", version, kVersion, DecodeTypeCode(type));
 				continue;
 			}
-			switch (type) {
-			case kMarkerChange:
-				Load<OnCustomMarkerChangeRegSet>(a_intfc);
-				break;
-			case kFastTravel:
-				Load<OnFastTravelConfirmRegSet>(a_intfc);
-				break;
-			default:
-				logger::critical("Unrecognized record type ({})!"sv, DecodeTypeCode(type));
-				break;
-			}
+
+			EventRegsHolder::GetSingleton()->Load(a_intfc, type);
 		}
 		logger::info("Finished loading data"sv);
 	}
 
 	void RevertCallback(SKSE::SerializationInterface* a_intfc)
 	{
-		Revert<OnCustomMarkerChangeRegSet>(a_intfc);
-		Revert<OnFastTravelConfirmRegSet>(a_intfc);
+		EventRegsHolder::GetSingleton()->Revert(a_intfc);
 
 		logger::info("Finished reverting data"sv);
 	}

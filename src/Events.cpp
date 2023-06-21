@@ -1,22 +1,35 @@
 #include "Events.h"
 #include "Offsets.h"
 
-OnCustomMarkerChangeRegSet* OnCustomMarkerChangeRegSet::GetSingleton()
+
+void EventRegsHolder::Save(SKSE::SerializationInterface* a_intfc, std::uint32_t a_version)
 {
-	static OnCustomMarkerChangeRegSet singleton;
-	return &singleton;
+	customMarker.Save(a_intfc, kCustomMarker, a_version);
+	fastTravel.Save(a_intfc, kFastTravel, a_version);
+	playerDialogue.Save(a_intfc, kPlayerDialogue, a_version);
 }
 
-OnCustomMarkerChangeRegSet::OnCustomMarkerChangeRegSet() :
-	Base("OnCustomMarkerChange"sv)
-{}
-
-OnFastTravelConfirmRegSet* OnFastTravelConfirmRegSet::GetSingleton()
+void EventRegsHolder::Load(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type)
 {
-	static OnFastTravelConfirmRegSet singleton;
-	return &singleton;
+	switch (a_type) {
+	case kCustomMarker:
+		customMarker.Load(a_intfc);
+		break;
+	case kFastTravel:
+		fastTravel.Load(a_intfc);
+		break;
+	case kPlayerDialogue:
+		playerDialogue.Load(a_intfc);
+		break;
+	default:
+		logger::critical("Unrecognized record type"sv);
+		break;
+	}
 }
 
-OnFastTravelConfirmRegSet::OnFastTravelConfirmRegSet() :
-	Base("OnFastTravelConfirm"sv)
-{}
+void EventRegsHolder::Revert(SKSE::SerializationInterface*)
+{
+	customMarker.Clear();
+	fastTravel.Clear();
+	playerDialogue.Clear();
+}

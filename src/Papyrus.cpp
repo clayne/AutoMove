@@ -35,18 +35,26 @@ namespace Papyrus
 
 	void RegisterForCustomMarkerChange(TESQuest* quest)
 	{
-		logger::trace("RegisterForCustomMarkerChange");
-
-		auto regs = OnCustomMarkerChangeRegSet::GetSingleton();
-		regs->Register(quest);
+		auto events = EventRegsHolder::GetSingleton();
+		events->customMarker.Register(quest);
 	}
 
 	void UnregisterForCustomMarkerChange(TESQuest* quest)
 	{
-		logger::trace("UnregisterForCustomMarkerChange");
+		auto events = EventRegsHolder::GetSingleton();
+		events->customMarker.Unregister(quest);
+	}
 
-		auto regs = OnCustomMarkerChangeRegSet::GetSingleton();
-		regs->Unregister(quest);
+	void RegisterForPlayerDialogue(TESQuest* quest)
+	{
+		auto events = EventRegsHolder::GetSingleton();
+		events->playerDialogue.Register(quest);
+	}
+
+	void UnregisterForPlayerDialogue(TESQuest* quest)
+	{
+		auto events = EventRegsHolder::GetSingleton();
+		events->playerDialogue.Unregister(quest);
 	}
 
 	bool RegisterFuncs(BSScript::IVirtualMachine* a_vm)
@@ -55,6 +63,8 @@ namespace Papyrus
 		a_vm->RegisterFunction("IsCustomDestinationActive", "AutoMove", IsCustomDestinationActive);
 		a_vm->RegisterFunction("RegisterForCustomMarkerChange", "AutoMove", RegisterForCustomMarkerChange);
 		a_vm->RegisterFunction("UnregisterForCustomMarkerChange", "AutoMove", UnregisterForCustomMarkerChange);
+		a_vm->RegisterFunction("RegisterForPlayerDialogue", "AutoMove", RegisterForPlayerDialogue);
+		a_vm->RegisterFunction("UnregisterForPlayerDialogue", "AutoMove", UnregisterForPlayerDialogue);
 		a_vm->RegisterFunction("GetCurrentMount", "AutoMove", GetCurrentMount);		
 
 		logger::info("Papyrus functions registered");

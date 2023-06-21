@@ -1,6 +1,6 @@
 {
   "name": "auto-move",
-  "version-string": "1.2.0",
+  "version-string": "1.3.0",
   "description": "Makes the player move to custom destination using AI pathfinding",
   "homepage": "https://github.com/zax-ftw/AutoMove",
   "license": "MIT",

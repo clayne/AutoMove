@@ -1,35 +1,38 @@
 #pragma once
 
-class OnCustomMarkerChangeRegSet : public RegistrationSet<std::uint32_t>
+
+class EventRegsHolder
 {
 public:
-	using Base = SKSE::RegistrationSet<std::uint32_t>;
+	[[nodiscard]] static EventRegsHolder* GetSingleton()
+	{
+		static EventRegsHolder singleton;
+		return &singleton;
+	}
 
-	static OnCustomMarkerChangeRegSet* GetSingleton();
+	enum : std::uint32_t
+	{
+		kCustomMarker = 'MARK',
+		kFastTravel = 'TRVL',
+		kPlayerDialogue = 'DIAL'
+	};
+
+	SKSE::RegistrationSet<std::uint32_t> customMarker{ "OnCustomMarkerChange"sv };
+	SKSE::RegistrationSet<std::uint32_t> fastTravel{ "OnFastTravelConfirm"sv };
+	SKSE::RegistrationSet<Actor*, bool> playerDialogue{ "OnPlayerDialogue"sv };
+
+	void Save(SKSE::SerializationInterface* a_intfc, std::uint32_t a_version);
+	void Load(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type);
+	void Revert(SKSE::SerializationInterface* a_intfc);
 
 private:
-	OnCustomMarkerChangeRegSet();
-	OnCustomMarkerChangeRegSet(const OnCustomMarkerChangeRegSet&) = delete;
-	OnCustomMarkerChangeRegSet(OnCustomMarkerChangeRegSet&&) = delete;
-	~OnCustomMarkerChangeRegSet() = default;
+	EventRegsHolder() = default;
+	EventRegsHolder(const EventRegsHolder&) = delete;
+	EventRegsHolder(EventRegsHolder&&) = delete;
+	~EventRegsHolder() = default;
 
-	OnCustomMarkerChangeRegSet& operator=(const OnCustomMarkerChangeRegSet&) = delete;
-	OnCustomMarkerChangeRegSet& operator=(OnCustomMarkerChangeRegSet&&) = delete;
+	EventRegsHolder& operator=(const EventRegsHolder&) = delete;
+	EventRegsHolder& operator=(EventRegsHolder&&) = delete;
+
 };
 
-class OnFastTravelConfirmRegSet : public RegistrationSet<std::uint32_t>
-{
-public:
-	using Base = SKSE::RegistrationSet<std::uint32_t>;
-
-	static OnFastTravelConfirmRegSet* GetSingleton();
-
-private:
-	OnFastTravelConfirmRegSet();
-	OnFastTravelConfirmRegSet(const OnFastTravelConfirmRegSet&) = delete;
-	OnFastTravelConfirmRegSet(OnFastTravelConfirmRegSet&&) = delete;
-	~OnFastTravelConfirmRegSet() = default;
-
-	OnFastTravelConfirmRegSet& operator=(const OnFastTravelConfirmRegSet&) = delete;
-	OnFastTravelConfirmRegSet& operator=(OnFastTravelConfirmRegSet&&) = delete;
-};

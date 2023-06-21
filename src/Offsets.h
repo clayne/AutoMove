@@ -27,6 +27,11 @@ namespace RE
 			constexpr REL::ID SetAngleX{ 36602 };        // 0x005edd50
 		}
 
+		namespace Character
+		{
+			inline constexpr REL::ID Vtbl{ 261397 };
+		}
+
 		namespace PlacePlayerMarkerCallbackFunctor
 		{
 			constexpr REL::ID Vtbl{ 270842 };  // 0x016c3568
